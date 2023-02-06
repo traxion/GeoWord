@@ -46,8 +46,8 @@ const HomeScreen = ({navigation}) => {
         <Text style={styles.menuItem}>About</Text>
         <Pressable
           onPress={() => {
-            navigation.navigate('GameScreen', {
-                screen: 'game',
+            navigation.navigate('ScoreScreen', {
+                screen: 'score',
                 title: 'GeoWord',
               })
           }}

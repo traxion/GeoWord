@@ -12,11 +12,12 @@ import {
 } from 'react-native'
 import { colors, CLEAR, ENTER, copyArray, getDayOfTheYear, cache } from '../../utilities'
 import Keyboard from '../Keyboard'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import AppContext from '../../context/AppContext'
 
 const NUMBER_OF_LIVES = 5
+const SCORE = 0
+const NUMBER_OF_LIFE_LINES = 3
 
 const Game = ({ dataArray }) => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0)
@@ -24,13 +25,12 @@ const Game = ({ dataArray }) => {
   const [imageURL, setImageURL] = useState(dataArray[0].image)
   const [imageType, setImageType] = useState(dataArray[0].type)
   const [lives, setLives] = useState(NUMBER_OF_LIVES)
-  const [score, setScore] = useState(0)
-  const [lifelines, setLifelines] = useState(3)
+  const [score, setScore] = useState(SCORE)
+  const [lifelines, setLifelines] = useState(NUMBER_OF_LIFE_LINES)
   const [modalVisible, setModalVisible] = useState(false)
   const [missingLettersUsed, setMissingLettersUsed] = useState(false)
   const [shuffleLettersUsed, setShuffleLettersUsed] = useState(false)
   const [answerTypeUsed, setAnswerTypeUsed] = useState(false)
-  const cachedData = cache.get(dayOfTheYear)
   const [gameData, setGameData] = useState(dataArray)
 
   // Split word to create array of letters eg. ['h', 'e', 'l', 'l', 'o'] when the word was hello
@@ -48,13 +48,10 @@ const Game = ({ dataArray }) => {
 
   // Get the day of the year
   const dayOfTheYear = getDayOfTheYear()
-  
-  // Get the logged in state from the context
-  const { loggedInState, setLoggedInState } = useContext(AppContext)
 
   useEffect(() => {
     if (loaded) persistState()
-  }, [rows, gameState, lives, score])
+  }, [rows, gameState, lives])
 
   useEffect(() => {
     readState()
@@ -79,7 +76,8 @@ const Game = ({ dataArray }) => {
     try {
       // JSON.parse(string) to get data
       const dataString = JSON.stringify(data)
-      await cache.set("@game", dataString);
+      await cache.set(dayOfTheYear+"_gameState", dataString);
+      await cache.set(dayOfTheYear+'_score', score);
     } catch (error) {
       console.log('Failed to write data to async storage: ', error)
     }
@@ -87,12 +85,17 @@ const Game = ({ dataArray }) => {
 
   const readState = async () => {
     // await cache.clearAll();
-    const dataString = await cache.get("@game")
-    const gameDataArray = await cache.get(dayOfTheYear)
+    const dataString = await cache.get(dayOfTheYear+"_gameState")
+    const gameDataString = await cache.get(dayOfTheYear+'_data')
+
+    if (!dataString) {
+      setLoaded(true)
+      return
+    }
     
     try {
       const data = JSON.parse(dataString)
-      const gameData = JSON.parse(gameDataArray)
+      const gameData = JSON.parse(gameDataString)
 
       setRows(data.rows)
       setCurrentRow(data.currentRow)
@@ -164,7 +167,6 @@ const Game = ({ dataArray }) => {
       if (currentColumn === rows[0].length) {
         setCurrentRow(currentRow + 1)
         setCurrentColumn(0)
-        setLoggedInState("Playing")
       }
 
       return
@@ -200,10 +202,19 @@ const Game = ({ dataArray }) => {
       } else {
         setScore(score * 2)
       }
-      AsyncStorage.removeItem('@game')
     } else if (checkIfLost()) {
-      Alert.alert('asdasd', 'You lost!')
+      if(score === 0){
+        Alert.alert('GAME OVER!', 'Try again tomorrow!')
+      } else {
+        Alert.alert('GAME OVER!', 'Score: ' + score)
+      }
       setGameState('lost')
+      if (lives === 0) {
+        return
+      } else {
+        setLives(lives - 1)
+      }
+
     } else {
       setLives(lives - 1)
     }
@@ -218,7 +229,7 @@ const Game = ({ dataArray }) => {
     return currentRow === rows.length
   }
 
-  const nextImage = () => {
+  const nextImage = async () => {
     setCurrentWordIndex(currentWordIndex + 1)
     setWord(gameData[currentWordIndex + 1].name)
     setImageURL(gameData[currentWordIndex + 1].image)

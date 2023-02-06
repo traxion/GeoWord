@@ -5,16 +5,20 @@ import Game from '../components/game/game'
 import { useEffect } from 'react'
 
 const GameScreen = ({navigation}) => {
-    // const [gameDataArray, setGameDataArray] = useState(cache.get(dayOfTheYear) ?? [] )
     const data = require('../components/data/data.json')
     const dataArray = shuffle(data)  
 
     // Get the day of the year
     const dayOfTheYear = getDayOfTheYear()
 
+    // Clear cache on the first of January
+    if (dayOfTheYear === 1) {
+        cache.clearAll();
+    }
+
     const gameData = async () => {
       // Get the data from the cache
-      const cachedData = await cache.get(dayOfTheYear)
+      const cachedData = await cache.get(dayOfTheYear+'_data')
 
       try {
         // JSON.parse(string) to get data
@@ -22,7 +26,7 @@ const GameScreen = ({navigation}) => {
         
         // If the data is not in the cache, then add it
         if (!cachedData) {
-          cache.set(dayOfTheYear, dataString)
+          cache.set(dayOfTheYear+'_data', dataString)
         }
       } catch (error) {
         console.log('Failed to write data to async storage: ', error)
