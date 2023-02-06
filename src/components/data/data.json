@@ -1,0 +1,22 @@
+[
+    {
+        "image": "https://www.planetware.com/wpimages/2020/02/france-in-pictures-beautiful-places-to-photograph-eiffel-tower.jpg",
+        "name": "paris",
+        "type": "city"
+    },
+    {
+        "image": "https://thumbs.dreamstime.com/b/big-ben-london-autumn-leaves-32915756.jpg",
+        "name": "london",
+        "type": "city"
+    },
+    {
+        "image": "https://media.istockphoto.com/id/642182274/photo/aerial-panorama-of-stockholm-sweden.jpg?s=612x612&w=0&k=20&c=U4_YZIKJOQEpfBxj7U3wU3uJBf-607op6aAybBnEFaE=",
+        "name": "sweden",
+        "type": "country"
+    },
+    {
+        "image": "https://www.planetware.com/wpimages/2019/09/croatia-in-pictures-most-beautiful-places-to-visit-split-views.jpg",
+        "name": "croatia",
+        "type": "country"
+    }
+]
