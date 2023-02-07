@@ -51,7 +51,7 @@ const Game = ({ dataArray }) => {
 
   useEffect(() => {
     if (loaded) persistState()
-  }, [rows, gameState, lives])
+  }, [rows, gameState, lives, currentRow])
 
   useEffect(() => {
     readState()
@@ -195,7 +195,7 @@ const Game = ({ dataArray }) => {
 
   const checkGameState = () => {
     if (checkIfWon()) {
-      Alert.alert('HURAAAY', 'You Won!', [{ text: 'Next', onPress: nextImage }])
+      Alert.alert('Congratualations!', 'You have guessed correctly!', [{ text: 'Next', onPress: nextImage }])
       setGameState('won')
       if (score === 0) {
         setScore(250)
