@@ -30,9 +30,6 @@ const ScoreScreen = ({navigation}) => {
       highscores()
     }, [isFocused])
 
-    // console.log(scores.sort((a,b)=>b-a).slice(0,10))
-    const test = Object.values(scores).sort((a,b)=>b-a).slice(0,10)
-    console.log(test)
     return (
       <SafeAreaView style={styles.container}>
         <StatusBar style="light" />

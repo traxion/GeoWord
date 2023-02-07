@@ -9,11 +9,11 @@ import {
   Dimensions,
   Modal,
   Pressable,
+  TouchableOpacity
 } from 'react-native'
 import { colors, CLEAR, ENTER, copyArray, getDayOfTheYear, cache } from '../../utilities'
 import Keyboard from '../Keyboard'
 import { useState, useEffect } from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const NUMBER_OF_LIVES = 5
 const SCORE = 0
@@ -51,7 +51,7 @@ const Game = ({ dataArray }) => {
 
   useEffect(() => {
     if (loaded) persistState()
-  }, [rows, gameState, lives, currentRow])
+  }, [rows, gameState, lives, currentRow, lifelines])
 
   useEffect(() => {
     readState()
@@ -71,8 +71,11 @@ const Game = ({ dataArray }) => {
       imageType,
       currentWordIndex,
       letters,
+      lifelines,
+      missingLettersUsed,
+      shuffleLettersUsed,
+      answerTypeUsed,
     }
-
     try {
       // JSON.parse(string) to get data
       const dataString = JSON.stringify(data)
@@ -109,6 +112,10 @@ const Game = ({ dataArray }) => {
       setCurrentWordIndex(data.currentWordIndex)
       setLetters(data.letters)
       setGameData(gameData)
+      setLifelines(data.lifelines)
+      setMissingLettersUsed(data.missingLettersUsed)
+      setShuffleLettersUsed(data.shuffleLettersUsed)
+      setAnswerTypeUsed(data.answerTypeUsed)
       
     } catch (error) {
       console.log("Couldn't parse that state: ", error)
@@ -333,6 +340,9 @@ const Game = ({ dataArray }) => {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
+            <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+              <Text style={{width: 100, textAlign: 'right'}}>X</Text>
+            </TouchableOpacity>
               <Text style={styles.modalText}>Lifelines!</Text>
               <Pressable
                 disabled={missingLettersUsed}
@@ -500,9 +510,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   modalText: {
-    marginBottom: 15,
+    marginBottom: 18,
     textAlign: 'center',
+    fontWeight: 'bold',
   },
+  modalHeaderCloseText: {
+    // textAlign: "right",
+    paddingLeft: 5,
+    paddingRight: 5
+  }
 })
 
 export default Game
