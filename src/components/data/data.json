@@ -18,5 +18,20 @@
         "image": "https://www.planetware.com/wpimages/2019/09/croatia-in-pictures-most-beautiful-places-to-visit-split-views.jpg",
         "name": "croatia",
         "type": "country"
+    },
+    {
+        "image": "https://sncdn.com/imagecache/db/id/504546/go154978.jpg",
+        "name": "pretoria",
+        "type": "city"
+    },
+    {
+        "image": "https://www.whitehouse.gov/wp-content/uploads/2021/01/about_the_white_house.jpg",
+        "name": "washington",
+        "type": "city"
+    },
+    {
+        "image": "https://i.natgeofe.com/n/6c02ad5a-977b-4f12-b9c0-02ffb0736e07/metropolitan-cathedral-zocalo-mexico-city_16x9.JPG",
+        "name": "mexico",
+        "type": "country"
     }
 ]

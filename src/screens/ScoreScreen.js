@@ -35,7 +35,6 @@ const ScoreScreen = ({navigation}) => {
         <StatusBar style="light" />
         <Pressable
           onPress={() => {
-            console.log('pressed play')
             navigation.navigate('HomeScreen', {
                 screen: 'home',
                 title: 'GeoWord',

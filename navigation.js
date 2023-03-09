@@ -11,7 +11,7 @@ const Stack = createStackNavigator()
 export const SignedInStack = () => (
   <AppProvider>
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="ScoreScreen">
+      <Stack.Navigator initialRouteName="HomeScreen">
         <Stack.Screen
           name="HomeScreen"
           component={HomeScreen}

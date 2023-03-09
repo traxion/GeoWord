@@ -202,13 +202,17 @@ const Game = ({ dataArray }) => {
 
   const checkGameState = () => {
     if (checkIfWon()) {
-      Alert.alert('Congratualations!', 'You have guessed correctly!', [{ text: 'Next', onPress: nextImage }])
-      setGameState('won')
       if (score === 0) {
         setScore(250)
       } else {
         setScore(score * 2)
       }
+      if (currentWordIndex === gameData.length - 1) {
+        Alert.alert('Congratualations!', 'You have completed all the images for today!', [{ text: 'Ok', onPress: doneForToday}])
+        return
+      }
+      Alert.alert('Congratualations!', 'You have guessed correctly!', [{ text: 'Next', onPress: nextImage }])
+      setGameState('won')
     } else if (checkIfLost()) {
       if(score === 0){
         Alert.alert('GAME OVER!', 'Try again tomorrow!')
@@ -236,6 +240,11 @@ const Game = ({ dataArray }) => {
     return currentRow === rows.length
   }
 
+  const doneForToday = async () => {
+    setGameState('done')
+    setLoaded(true)
+  }
+
   const nextImage = async () => {
     setCurrentWordIndex(currentWordIndex + 1)
     setWord(gameData[currentWordIndex + 1].name)
@@ -251,6 +260,7 @@ const Game = ({ dataArray }) => {
       ),
     )
     setCurrentRow(0)
+
     setLoaded(true)
   }
 
@@ -419,7 +429,7 @@ const Game = ({ dataArray }) => {
                   },
                 ]}
               >
-                <Text style={styles.cellText}>{cell.toUpperCase()}</Text>
+                <Text style={[letters.length > 8 ? styles.cellText2 : styles.cellText]}>{cell.toUpperCase()}</Text>
               </View>
             ))}
           </View>
@@ -459,6 +469,11 @@ const styles = StyleSheet.create({
     color: colors.lightgrey,
     fontWeight: 'bold',
     fontSize: 28,
+  },
+  cellText2: {
+    color: colors.lightgrey,
+    fontWeight: 'bold',
+    fontSize: 18,
   },
   image: {
     height: Dimensions.get('window').width,
@@ -513,11 +528,6 @@ const styles = StyleSheet.create({
     marginBottom: 18,
     textAlign: 'center',
     fontWeight: 'bold',
-  },
-  modalHeaderCloseText: {
-    // textAlign: "right",
-    paddingLeft: 5,
-    paddingRight: 5
   }
 })
 

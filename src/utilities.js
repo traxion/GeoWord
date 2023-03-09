@@ -64,7 +64,7 @@ export const getDayOfTheYear = () => {
 
 // Create a new cache instance
 export const cache = new Cache({
-  namespace: "myapp",
+  namespace: "GeoWord",
   policy: {
       maxEntries: 50000, // if unspecified, it can have unlimited entries
       stdTTL: 0 // the standard ttl as number in seconds, default: 0 (unlimited)
