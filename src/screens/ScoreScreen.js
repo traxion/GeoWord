@@ -7,28 +7,34 @@ import { colors } from '../utilities'
 import { useIsFocused } from "@react-navigation/native";
 
 const ScoreScreen = ({navigation}) => {
-    const [scores, setScores] = useState({})
-    const isFocused = useIsFocused();
+  const [scores, setScores] = useState({});
+  const isFocused = useIsFocused()
 
-    const highscores = async () => {
-      // For loop to retrieve all the scores
-      for (i = 1; i < 366; i++) {
-        try {
-          // await cache.clearAll();
-          const score = await cache.get(i+'_score')
-          const newScores = {[i]: score}
-          // Only add the score if it is not null
-          if(score) setScores({...scores, ...newScores})
-
-        } catch (error) {
-          console.log('Failed to write data to async storage: ', error)
+  const highscores = async () => {
+    // Initialize an empty array to accumulate scores
+    const scoresArray = [];
+  
+    // For loop to retrieve all the scores
+    for (i = 1; i < 366; i++) {
+      try {
+        const score = await cache.get(i+'_score');
+        // Only add the score if it is not null
+        if (score) {
+          scoresArray.push({ [i]: score });
         }
+      } catch (error) {
+        console.log('Failed to write data to async storage: ', error);
       }
     }
-
-    useEffect(() => {
-      highscores()
-    }, [isFocused])
+  
+    // Set the state of scores with the accumulated array
+    setScores(Object.assign({}, ...scoresArray));
+  };
+  
+  useEffect(() => {
+    highscores();
+  }, [isFocused]);
+  
 
     return (
       <SafeAreaView style={styles.container}>
